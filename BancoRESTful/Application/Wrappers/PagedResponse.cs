@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Wrappers
+{
+    public class PagedResponse<T> : Response<T>
+    {
+        public PagedResponse(int pageNumber, int pageSize,T data)
+        {
+            this.PageNumber = pageNumber;
+            this.PageSize = pageSize;
+            this.Data = data;
+            this.Message = null;
+            this.Succeeded = true;
+            this.Errors = null;
+        }
+
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+
+    }
+}
