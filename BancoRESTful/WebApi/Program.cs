@@ -35,6 +35,7 @@ using ( var scope = app.Services.CreateScope())
     await DefaultAdminUser.SeedAsync(userManager, RoleManager);
     await DefaultBasicUser.SeedAsync(userManager, RoleManager);
 }
+//app.Run();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -43,7 +44,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.useErrorHandlingMiddleware();
 app.MapControllers();

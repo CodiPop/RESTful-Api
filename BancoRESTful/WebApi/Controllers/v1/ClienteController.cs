@@ -3,6 +3,7 @@ using Application.Features.Clientes.Comands.DeleteClienteCommand;
 using Application.Features.Clientes.Comands.UpdateClienteCommand;
 using Application.Features.Clientes.Queries.GetAllClientes;
 using Application.Features.Clientes.Queries.GetClienteById;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,7 @@ namespace WebApi.Controllers.v1
         //POST api/<controller>
 
         [HttpPost]
+        [Authorize("Admin")]
         public async Task<IActionResult> Post(CreateClienteCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -39,6 +41,7 @@ namespace WebApi.Controllers.v1
         //PUT api/<controller>/5
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(int id,UpdateClienteCommand command)
         {
             if (id != command.Id)
@@ -51,12 +54,15 @@ namespace WebApi.Controllers.v1
 
         //Delete api/<controller>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id, DeleteClienteCommand command)
         {
             if (id != command.Id)
                 return BadRequest();
 
             return Ok(await Mediator.Send(new DeleteClienteCommand { Id =id}));
+            //await Mediator.Send(new DeleteClienteCommand { Id = id });
+            return new EmptyResult();
         }
     }
 }

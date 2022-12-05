@@ -1,7 +1,9 @@
-﻿using Application.Wrappers;
+﻿using Application.Interface;
+using Application.Wrappers;
 using Domain.Settings;
 using Identity.Context;
 using Identity.Models;
+using Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -28,6 +30,7 @@ namespace Identity
                 b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+            services.AddTransient<IAccountService,AccountService>();
             services.Configure<JWT>(configuration.GetSection("JWT"));
             services.AddAuthentication(options =>
             {
@@ -46,7 +49,7 @@ namespace Identity
                     ClockSkew = TimeSpan.Zero,
                     ValidIssuer = configuration["JWT:Issuer"],
                     ValidAudience = configuration["JWT:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Issuer"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
                 };
 
                 o.Events = new JwtBearerEvents()
